@@ -1,0 +1,668 @@
+// ==UserScript==
+// @name         FetLife Search+
+// @namespace    http://tampermonkey.net/
+// @version      0.2
+// @description  Add a Search+ button to FetLife for advanced searching.
+// @match        https://fetlife.com/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    const SEARCH_PLUS_BUTTON_ID = 'searchPlusButton';
+
+    // Create the Search+ button
+    const searchPlusButton = document.createElement('a');
+    searchPlusButton.className = 'flex items-center h-54 p-2 xl:mr-2 mr-1 font-normal link gray-400 hover-gray-300';
+    searchPlusButton.href = '/search'; // Modify this URL if needed
+    searchPlusButton.title = 'Search+';
+    searchPlusButton.innerText = 'Search+';
+
+    // Attach event listener to Search+ button
+    searchPlusButton.addEventListener('click', function() {
+        // Your code to handle the Search+ button click
+        // ...
+    });
+
+   // Find the Places button and insert the Search+ button after it
+    const placesButton = document.querySelector('a[title="Places"]');
+    if (placesButton) {
+        placesButton.parentNode.insertBefore(searchPlusButton, placesButton.nextSibling);
+    }
+
+    // Your existing initialization code here
+    // ...
+
+    // Get the necessary DOM elements
+    const locationSelect = document.querySelector('select');
+    const roleSelect = document.getElementById('roleSelect');
+    const PreferencesContainer = document.querySelector('.Preferences');
+    const PreferencesCheckboxes = PreferencesContainer.querySelectorAll('input');
+    const orientationContainer = document.querySelector('.orientation');
+    const orientationCheckboxes = orientationContainer.querySelectorAll('input');
+    const exclusionsCheckboxes = document.querySelectorAll('.exclusions label input');
+    const ageSlider1 = document.getElementById('ageSlider1');
+    const ageSlider2 = document.getElementById('ageSlider2');
+    const searchedLocation = document.getElementById('searchedLocation');
+    const searchedRole = document.getElementById('searchedRole');
+    const searchedPreferences = document.getElementById('searchedPreferences');
+    const searchedOrientation = document.getElementById('searchedOrientation');
+    const searchedExclusions = document.getElementById('searchedExclusions');
+    const ageValues = document.getElementById('ageValues');
+
+    // Update functions for Age Range
+    function updateSearchedAgeRange() {
+        const ageValue1 = ageSlider1.value;
+        const ageValue2 = ageSlider2.value;
+        ageValues.textContent = `${ageValue1} to ${ageValue2}`;
+    }
+
+    // Update functions for Location and Roles
+    function updateSearchedLocation() {
+        const selectedLocation = locationSelect.value;
+        searchedLocation.textContent = `Location: ${selectedLocation}`;
+    }
+
+    function updateSearchedRole() {
+        const selectedRole = roleSelect.value;
+        searchedRole.textContent = `Roles: ${selectedRole}`;
+    }
+
+    function updateSearchedPreferences() {
+        const selectedPreferences = Array.from(PreferencesCheckboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.nextElementSibling.textContent.trim())
+            .join(', ');
+        searchedPreferences.textContent = `Preferences: ${selectedPreferences}`;
+    }
+
+    // Update function for Orientation
+    function updateSearchedOrientation() {
+        const selectedOrientation = Array.from(orientationCheckboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.nextElementSibling.textContent.trim())
+            .join(', ');
+        searchedOrientation.textContent = `Orientation: ${selectedOrientation}`;
+    }
+
+    // Update function for Exclusions
+    function updateSearchedExclusions() {
+        const selectedExclusions = Array.from(exclusionsCheckboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.nextElementSibling.textContent.trim())
+            .join(', ');
+        searchedExclusions.textContent = `Exclusions: ${selectedExclusions}`;
+    }
+
+    // Event listeners for updates
+    locationSelect.addEventListener('change', updateSearchedLocation);
+    roleSelect.addEventListener('change', updateSearchedRole);
+    PreferencesContainer.addEventListener('change', updateSearchedPreferences);
+    orientationContainer.addEventListener('change', updateSearchedOrientation);
+    exclusionsCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSearchedExclusions);
+    });
+    ageSlider1.addEventListener('input', updateSearchedAgeRange);
+    ageSlider2.addEventListener('input', updateSearchedAgeRange);
+
+    // Call these functions initially to show default values
+    updateSearchedLocation();
+    updateSearchedRole();
+    updateSearchedPreferences();
+    updateSearchedOrientation();
+    updateSearchedExclusions();
+    updateSearchedAgeRange();
+})();
+
+
+<!-- ███████████████████ -->
+<!-- █████ Opening █████ -->
+<!-- ███████████████████ -->
+
+<!-- ████████████████████ -->
+<!-- █████ Kinkster █████ -->
+<!-- ████████████████████ -->
+
+// Create the advanced search section
+    const articleDiv = document.createElement('div');
+    articleDiv.id = 'kinksterArticle'; // Set an ID for the advanced search section
+    articleDiv.innerHTML = '<h1>Advanced Search Content</h1>';
+        document.body.appendChild(articleDiv);
+
+    // Append advanced search section to the document body
+    document.body.appendChild(articleDiv);
+
+    // Attach event listener to the dropdown after page load
+    window.addEventListener('load', function() {
+        // Your initialization code here, if needed
+
+        // Attach event listener to the dropdown
+        const locationDropdown = document.getElementById('locationDropdown');
+        if (locationDropdown) {
+            locationDropdown.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const distance = selectedOption.dataset.distance;
+
+                // Now you can use the 'distance' value in your later code
+                console.log('Selected distance:', distance);
+            });
+        }
+    });
+
+
+// Kinkster section HTML code
+const kinksterSectionHtml = `
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; margin-top: 1rem;">
+    <h1 style="text-align: center; font-size: 36px; margin-top: 0;">Discover your Ideal Kinkster(s)</h1>
+    <!-- Visual Line Separator -->
+    <hr style="border: none; height: 2px; background-color: #ddd; margin: 1rem 0;">
+</div>
+`;
+
+// Append your HTML content to the document
+const kinksterArticleDiv = document.createElement('div');
+kinksterArticleDiv.innerHTML = kinksterSectionHtml;
+document.body.appendChild(kinksterArticleDiv);
+
+<!-- ████████████████████ -->
+<!-- █████ Kinkster █████ -->
+<!-- ████████████████████ -->
+
+<!-- ███████████████-->
+<!-- █████ Age █████-->
+<!-- ███████████████-->
+
+// Create a wrapper div
+const ageSectionDiv = document.createElement('div');
+
+// Create an h1 element for the header
+const h1Element = document.createElement('h1');
+h1Element.style.fontSize = '24px';
+h1Element.textContent = 'Discover Users';
+
+// Create an hr element for the horizontal line
+const hrElement = document.createElement('hr');
+
+// Append the header and horizontal line to the wrapper div
+ageSectionDiv.appendChild(h1Element);
+ageSectionDiv.appendChild(hrElement);
+
+// Append the wrapper div to the document body
+document.body.appendChild(ageSectionDiv);
+
+// Reuse the existing ageSectionDiv variable
+ageSectionDiv.style.display = 'grid';
+ageSectionDiv.style.gridTemplateColumns = 'repeat(3, 1fr)';
+ageSectionDiv.style.gap = '10px';
+
+// Create the age subsection div
+const ageSubsectionDiv = document.createElement('div');
+ageSubsectionDiv.style.display = 'flex';
+ageSubsectionDiv.style.flexDirection = 'column';
+ageSubsectionDiv.style.alignItems = 'center';
+ageSubsectionDiv.style.justifyContent = 'center';
+ageSubsectionDiv.style.textAlign = 'center';
+
+// Create the h2 element for the title
+const h2Element = document.createElement('h2');
+h2Element.textContent = 'Age';
+
+// Create the slider container div
+const sliderContainerDiv = document.createElement('div');
+sliderContainerDiv.className = 'slider-container';
+
+// Create the inner div for sliders and values
+const innerDiv = document.createElement('div');
+
+// Create the first slider input
+const ageSlider1 = document.createElement('input');
+ageSlider1.type = 'range';
+ageSlider1.id = 'ageSlider1';
+ageSlider1.min = '18';
+ageSlider1.max = '101';
+ageSlider1.value = '18';
+ageSlider1.step = '1';
+
+// Create the second slider input
+const ageSlider2 = document.createElement('input');
+ageSlider2.type = 'range';
+ageSlider2.id = 'ageSlider2';
+ageSlider2.min = '18';
+ageSlider2.max = '101';
+ageSlider2.value = '101';
+ageSlider2.step = '1';
+
+// Create the span element for age values
+const ageValuesSpan = document.createElement('span');
+ageValuesSpan.id = 'ageValues';
+ageValuesSpan.textContent = '18 to 101, 101 to 101';
+
+// Append elements to their respective parents
+innerDiv.appendChild(ageSlider1);
+innerDiv.appendChild(ageSlider2);
+innerDiv.appendChild(ageValuesSpan);
+
+sliderContainerDiv.appendChild(innerDiv);
+
+ageSubsectionDiv.appendChild(h2Element);
+ageSubsectionDiv.appendChild(sliderContainerDiv);
+
+ageSectionDiv.appendChild(ageSubsectionDiv);
+
+// Append the age section to the document body
+document.body.appendChild(ageSectionDiv);
+
+
+
+<!-- ███████████████-->
+<!-- █████ Age █████-->
+<!-- ███████████████-->
+
+<!-- ████████████████████ -->
+<!-- █████ Location █████ -->
+<!-- ████████████████████ -->
+
+/// Create the wrapper div for the location section
+const locationSectionDiv = document.createElement('div');
+locationSectionDiv.style.display = 'flex';
+locationSectionDiv.style.flexDirection = 'column';
+locationSectionDiv.style.alignItems = 'center';
+locationSectionDiv.style.justifyContent = 'center';
+locationSectionDiv.style.textAlign = 'center';
+
+// Create the h2 element for the title
+const locationH2Element = document.createElement('h2');
+locationH2Element.textContent = 'Locations';
+
+// Create the select element for location options
+const selectElement = document.createElement('select');
+// Create and add option elements to the select
+const options = [
+  'St. John\'s',
+  'Mount Pearl',
+  '<30 min drive',
+  '1 hour drive',
+  '1-2 hour drive',
+  '2-3 hour drive',
+  '3-4 hour drive',
+  '>4 hour drive'
+];
+options.forEach(optionText => {
+  const optionElement = document.createElement('option');
+  optionElement.textContent = optionText;
+  selectElement.appendChild(optionElement);
+});
+
+// Append elements to the location section
+locationSectionDiv.appendChild(locationH2Element);
+locationSectionDiv.appendChild(selectElement);
+
+// Append the location section to the document body
+document.body.appendChild(locationSectionDiv);
+
+
+<!-- ████████████████████ -->
+<!-- █████ Location █████ -->
+<!-- ████████████████████ -->
+
+<!-- █████████████████ -->
+<!-- █████ Roles █████ -->
+<!-- █████████████████ -->
+
+// Create the wrapper div for the roles section
+const rolesSectionDiv = document.createElement('div');
+rolesSectionDiv.style.display = 'flex';
+rolesSectionDiv.style.flexDirection = 'column';
+rolesSectionDiv.style.alignItems = 'center';
+rolesSectionDiv.style.justifyContent = 'center';
+rolesSectionDiv.style.textAlign = 'center';
+
+// Reuse the existing selectElement variable
+selectElement.id = 'roleSelect'; // Assign the ID for easier access
+
+// Create and add option elements to the select
+const roles = [
+  { value: 'D-Types', label: 'D-Types' },
+  { value: 's-Types', label: 's-Types' },
+  { value: 'Non-D/s Only', label: 'Non-D/s Only' },
+  { value: 'Only Rope', label: 'Only Rope' },
+  { value: 'Spanking', label: 'Spanking' }
+];
+roles.forEach(role => {
+  const optionElement = document.createElement('option');
+  optionElement.value = role.value;
+  optionElement.textContent = role.label;
+  selectElement.appendChild(optionElement);
+});
+
+// Append elements to the roles section
+rolesSectionDiv.appendChild(h2Element);
+rolesSectionDiv.appendChild(selectElement);
+
+// Append the roles section to the document body
+document.body.appendChild(rolesSectionDiv);
+
+
+
+
+<!-- █████████████████ -->
+<!-- █████ Roles █████ -->
+<!-- █████████████████ -->
+
+<!-- ███████████████████████ -->
+<!-- █████ Preferences █████ -->
+<!-- ███████████████████████ -->
+
+// Create the wrapper div for the Preferences section
+const preferencesSectionDiv = document.createElement('div');
+preferencesSectionDiv.style.display = 'flex';
+preferencesSectionDiv.style.flexDirection = 'column';
+preferencesSectionDiv.style.alignItems = 'center';
+
+// Create the h2 element for the title
+const preferencesH2Element = document.createElement('h2');
+preferencesH2Element.textContent = 'Preferences';
+
+// Create the container for checkboxes
+const preferencesCheckboxesDiv = document.createElement('div');
+preferencesCheckboxesDiv.className = 'Preferences';
+preferencesCheckboxesDiv.style.display = 'grid';
+preferencesCheckboxesDiv.style.gridTemplateColumns = 'repeat(2, 1fr)';
+preferencesCheckboxesDiv.style.gap = '5px';
+preferencesCheckboxesDiv.style.margin = '10px';
+
+// Create an array of checkbox labels
+const checkboxLabels = [
+  'Femme', 'Trans', 'M2F', 'Gender Fluid',
+  'F2M', 'Genderqueer', 'Butch', 'Intersex'
+];
+
+// Create and add checkbox elements to the container
+checkboxLabels.forEach(labelText => {
+  const labelElement = document.createElement('label');
+  const checkboxElement = document.createElement('input');
+  checkboxElement.type = 'checkbox';
+  labelElement.appendChild(checkboxElement);
+  labelElement.appendChild(document.createTextNode(` ${labelText}`));
+  preferencesCheckboxesDiv.appendChild(labelElement);
+});
+
+// Append elements to the Preferences section
+preferencesSectionDiv.appendChild(preferencesH2Element);
+preferencesSectionDiv.appendChild(preferencesCheckboxesDiv);
+
+// Append the Preferences section to the document body
+document.body.appendChild(preferencesSectionDiv);
+
+
+<!-- ███████████████████████ -->
+<!-- █████ Preferences █████ -->
+<!-- ███████████████████████ -->
+
+<!-- ███████████████████████ -->
+<!-- █████ Orientation █████ -->
+<!-- ███████████████████████ -->
+
+// Create the wrapper div for the Orientation section
+const orientationSectionDiv = document.createElement('div');
+orientationSectionDiv.style.display = 'flex';
+orientationSectionDiv.style.flexDirection = 'column';
+orientationSectionDiv.style.alignItems = 'center';
+
+// Create the h2 element for the title
+const orientationH2Element = document.createElement('h2');
+orientationH2Element.textContent = 'Orientation';
+
+// Create the container for checkboxes
+const orientationCheckboxesDiv = document.createElement('div');
+orientationCheckboxesDiv.className = 'orientation';
+orientationCheckboxesDiv.style.display = 'grid';
+orientationCheckboxesDiv.style.gridTemplateColumns = 'repeat(2, 1fr)';
+orientationCheckboxesDiv.style.gap = '5px';
+orientationCheckboxesDiv.style.margin = '10px';
+
+// Array of checkbox labels for orientation
+const orientationCheckboxLabels = [
+  'Straight', 'Queer', 'Heteroflexible', 'Flux/Evolving',
+  'Bisexual', 'Unsure', 'Pansexual', 'Not Applicable'
+];
+
+// Create and add checkbox elements to the container
+orientationCheckboxLabels.forEach(labelText => {
+  const labelElement = document.createElement('label');
+  const checkboxElement = document.createElement('input');
+  checkboxElement.type = 'checkbox';
+  labelElement.appendChild(checkboxElement);
+  labelElement.appendChild(document.createTextNode(` ${labelText}`));
+  orientationCheckboxesDiv.appendChild(labelElement);
+});
+
+// Append elements to the Orientation section
+orientationSectionDiv.appendChild(orientationH2Element);
+orientationSectionDiv.appendChild(orientationCheckboxesDiv);
+
+// Append the Orientation section to the document body
+document.body.appendChild(orientationSectionDiv);
+
+
+
+<!-- ███████████████████████ -->
+<!-- █████ Orientation █████ -->
+<!-- ███████████████████████ -->
+
+<!-- ██████████████████████ -->
+<!-- █████ Exclusions █████ -->
+<!-- ██████████████████████ -->
+
+// Create the wrapper div for the Exclusions section
+const exclusionsSectionDiv = document.createElement('div');
+exclusionsSectionDiv.style.display = 'flex';
+exclusionsSectionDiv.style.flexDirection = 'column';
+exclusionsSectionDiv.style.alignItems = 'center';
+
+// Create the h2 element for the title
+const exclusionsH2Element = document.createElement('h2');
+exclusionsH2Element.textContent = 'Exclusions';
+
+// Create the container for checkboxes
+const exclusionsCheckboxesDiv = document.createElement('div');
+exclusionsCheckboxesDiv.className = 'exclusions';
+exclusionsCheckboxesDiv.style.display = 'grid';
+exclusionsCheckboxesDiv.style.gap = '5px';
+exclusionsCheckboxesDiv.style.margin = '10px';
+
+// Array of checkbox labels for exclusions
+const exclusionsCheckboxLabels = ['Female', 'Male', 'No Pics'];
+
+// Create and add checkbox elements to the container
+exclusionsCheckboxLabels.forEach(labelText => {
+  const labelElement = document.createElement('label');
+  const checkboxElement = document.createElement('input');
+  checkboxElement.type = 'checkbox';
+  labelElement.appendChild(checkboxElement);
+  labelElement.appendChild(document.createTextNode(` ${labelText}`));
+  exclusionsCheckboxesDiv.appendChild(labelElement);
+});
+
+// Append elements to the Exclusions section
+exclusionsSectionDiv.appendChild(exclusionsH2Element);
+exclusionsSectionDiv.appendChild(exclusionsCheckboxesDiv);
+
+// Append the Exclusions section to the document body
+document.body.appendChild(exclusionsSectionDiv);
+
+
+<!-- ██████████████████████ -->
+<!-- █████ Exclusions █████ -->
+<!-- ██████████████████████ -->
+
+<!-- █████████████████████ -->
+<!-- █████ Searching █████ -->
+<!-- █████████████████████ -->
+
+// Create the div for the Searching section
+const searchingSectionDiv = document.createElement('div');
+searchingSectionDiv.className = 'search-info';
+searchingSectionDiv.style.width = '100%';
+searchingSectionDiv.style.textAlign = 'left';
+
+// Create the h1 element for the title
+const searchingH1Element = document.createElement('h1');
+searchingH1Element.style.fontSize = '24px';
+searchingH1Element.style.marginTop = '0';
+searchingH1Element.textContent = 'What is being Searched?';
+
+// Create the divs for displaying searched values
+const searchedAgeRangeDiv = document.createElement('div');
+searchedAgeRangeDiv.id = 'searchedAgeRange';
+searchedAgeRangeDiv.textContent = 'Age: ';
+
+const searchedLocationDiv = document.createElement('div');
+searchedLocationDiv.id = 'searchedLocation';
+searchedLocationDiv.textContent = 'Location: (Location selected in the dropdown)';
+
+const searchedRoleDiv = document.createElement('div');
+searchedRoleDiv.id = 'searchedRole';
+searchedRoleDiv.textContent = 'Roles: (Roles selected in the dropdown)';
+
+const searchedPreferencesDiv = document.createElement('div');
+searchedPreferencesDiv.id = 'searchedPreferences';
+searchedPreferencesDiv.textContent = 'Preferences: (Selected checkboxes from Preferences)';
+
+const searchedOrientationDiv = document.createElement('div');
+searchedOrientationDiv.id = 'searchedOrientation';
+searchedOrientationDiv.textContent = 'Orientation: (Selected checkboxes from Orientation)';
+
+const searchedExclusionsDiv = document.createElement('div');
+searchedExclusionsDiv.id = 'searchedExclusions';
+searchedExclusionsDiv.textContent = 'Exclusions: (Selected checkboxes from Exclusions)';
+
+// Append elements to the Searching section
+searchingSectionDiv.appendChild(searchingH1Element);
+searchingSectionDiv.appendChild(searchedAgeRangeDiv);
+searchingSectionDiv.appendChild(searchedLocationDiv);
+searchingSectionDiv.appendChild(searchedRoleDiv);
+searchingSectionDiv.appendChild(searchedPreferencesDiv);
+searchingSectionDiv.appendChild(searchedOrientationDiv);
+searchingSectionDiv.appendChild(searchedExclusionsDiv);
+
+// Append the Searching section to the document body
+document.body.appendChild(searchingSectionDiv);
+
+
+<!-- █████████████████████ -->
+<!-- █████ Searching █████ -->
+<!-- █████████████████████ -->
+
+<!-- █████████████████████████ -->
+<!-- █████ Search Button █████ -->
+<!-- █████████████████████████ -->
+
+// Create the div for the Search Button section
+const searchButtonDiv = document.createElement('div');
+searchButtonDiv.style.textAlign = 'center';
+searchButtonDiv.style.marginTop = '20px';
+
+// Create the button element
+const searchButtonElement = document.createElement('button');
+searchButtonElement.id = 'searchButton';
+searchButtonElement.textContent = 'Search';
+
+// Append the button element to the Search Button section
+searchButtonDiv.appendChild(searchButtonElement);
+
+// Append the Search Button section to the document body
+document.body.appendChild(searchButtonDiv);
+
+
+<!-- █████████████████████████ -->
+<!-- █████ Search Button █████ -->
+<!-- █████████████████████████ -->
+
+<!-- ██████████████████ -->
+<!-- █████ Script █████ -->
+<!-- ██████████████████ -->
+
+
+// Get the necessary DOM elements
+const locationSelect = document.querySelector('select');
+const roleSelect = document.getElementById('roleSelect');
+const PreferencesContainer = document.querySelector('.Preferences');
+const PreferencesCheckboxes = PreferencesContainer.querySelectorAll('input');
+const orientationContainer = document.querySelector('.orientation');
+const orientationCheckboxes = orientationContainer.querySelectorAll('input');
+const exclusionsCheckboxes = document.querySelectorAll('.exclusions label input');
+const ageValues = document.getElementById('ageValues');
+const searchedLocation = document.getElementById('searchedLocation');
+const searchedRole = document.getElementById('searchedRole');
+const searchedPreferences = document.getElementById('searchedPreferences');
+const searchedOrientation = document.getElementById('searchedOrientation');
+const searchedExclusions = document.getElementById('searchedExclusions');
+
+
+
+
+
+// Update functions for Age Range
+function updateSearchedAgeRange() {
+  const ageValue1 = ageSlider1.value;
+  const ageValue2 = ageSlider2.value;
+  ageValues.textContent = `${ageValue1} to ${ageValue2}`;
+}
+
+// Update functions for Location and Roles
+function updateSearchedLocation() {
+  const selectedLocation = locationSelect.value;
+  searchedLocation.textContent = `Location: ${selectedLocation}`;
+}
+
+function updateSearchedRole() {
+  const selectedRole = roleSelect.value;
+  searchedRole.textContent = `Roles: ${selectedRole}`;
+}
+
+function updateSearchedPreferences() {
+  const selectedPreferences = Array.from(PreferencesCheckboxes)
+    .filter(checkbox => checkbox.checked)
+    .map(checkbox => checkbox.nextElementSibling.textContent.trim())
+    .join(', ');
+  searchedPreferences.textContent = `Preferences: ${selectedPreferences}`;
+}
+
+// Update function for Orientation
+function updateSearchedOrientation() {
+  const selectedOrientation = Array.from(orientationCheckboxes)
+    .filter(checkbox => checkbox.checked)
+    .map(checkbox => checkbox.nextElementSibling.textContent.trim())
+    .join(', ');
+  searchedOrientation.textContent = `Orientation: ${selectedOrientation}`;
+}
+
+// Update function for Exclusions
+function updateSearchedExclusions() {
+  const selectedExclusions = Array.from(exclusionsCheckboxes)
+    .filter(checkbox => checkbox.checked)
+    .map(checkbox => checkbox.nextElementSibling.textContent.trim())
+    .join(', ');
+  searchedExclusions.textContent = `Exclusions: ${selectedExclusions}`;
+}
+
+// Event listeners for updates
+locationSelect.addEventListener('change', updateSearchedLocation);
+roleSelect.addEventListener('change', updateSearchedRole);
+PreferencesContainer.addEventListener('change', updateSearchedPreferences);
+orientationContainer.addEventListener('change', updateSearchedOrientation);
+exclusionsCheckboxes.forEach(checkbox => {
+  checkbox.addEventListener('change', updateSearchedExclusions);
+});
+ageSlider1.addEventListener('input', updateSearchedAgeRange);
+ageSlider2.addEventListener('input', updateSearchedAgeRange);
+
+// Call these functions initially to show default values
+updateSearchedLocation();
+updateSearchedRole();
+updateSearchedPreferences();
+updateSearchedOrientation();
+updateSearchedExclusions();
+updateSearchedAgeRange();
